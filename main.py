@@ -149,9 +149,7 @@ def admin_only(f):
     return decorated_function
 
 
-@admin_only
-@app.route('/post/<int:post_id>')
-@login_required
+@app.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def show_post(post_id):
     requested_post = db.session.get(BlogPost, post_id)
     comment_form = CommentForm()
@@ -167,8 +165,6 @@ def show_post(post_id):
         )
         db.session.add(new_comment)
         db.session.commit()
-        return render_template("post.html", post=requested_post, form=comment_form,
-                               logged_in=current_user.is_authenticated)
     return render_template("post.html", post=requested_post, form=comment_form, logged_in=current_user.is_authenticated)
 
 
